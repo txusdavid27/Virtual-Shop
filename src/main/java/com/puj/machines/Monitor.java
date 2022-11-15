@@ -5,19 +5,27 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import org.zeromq.SocketType;
-import org.zeromq.ZMQ;
 import org.zeromq.ZMsg;
-import org.zeromq.ZMQ.Poller;
 import org.zeromq.ZMQ.Socket;
 import org.zeromq.ZContext;
 import org.zeromq.ZFrame;
 
-public class Servidor {
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.rmi.AlreadyBoundException;
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.io.PrintWriter;
 
+public class Monitor {
+    private static final int PUERTO = 1100;
     public static final String SEPARATOR = ";";
     public static final String QUOTE = "\"";
     private static byte[]    WORKER_READY = { '\001' };
@@ -25,6 +33,29 @@ public class Servidor {
 
     public static void main( String[] args ) throws Exception
     {
+
+        Remote remote = UnicastRemoteObject.exportObject(new Interfaz() {
+            /*
+             * Sobrescribir opcionalmente los metodos que escribimos en la interfaz
+             */
+            @Override
+            public String consultarRMI() throws RemoteException {            
+                return consultar();
+            };
+            @Override
+            public String adquirirRMI(Integer id, Integer cantidad) throws RemoteException {
+                // Escribir archivo
+                return adquirir(id, cantidad);
+            };
+        }, 0);
+
+        Registry registry = LocateRegistry.createRegistry(PUERTO);
+        leerRegistros();
+        System.out.println("Servidor escuchando en el puerto " + String.valueOf(PUERTO));
+        registry.bind("Tienda Virtual", remote);
+
+
+
         //  Prepare our context and sockets
         String answer="";
         try (ZContext context = new ZContext()) {
