@@ -48,10 +48,14 @@ public class Conexion implements InterfazBD{
     public boolean validarUsuario(Usuario usuario){
         try{
             Statement statement = c.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from user");
+            ResultSet resultSet = statement.executeQuery("select * from usuario");
             while(resultSet.next()){
-                if(usuario.getContraseña().equals(resultSet.getString("password"))){
-                    return true;
+                if(usuario.getNombre().equals(resultSet.getString("name"))){
+                    if(usuario.getContraseña().equals(resultSet.getString("password"))){
+                        return true;
+                    }else{
+                        System.out.println("Contraseña incorrecta");
+                    }
                 }
             }
         }catch(Exception e){

@@ -23,12 +23,14 @@ public class Cliente
         do{
             System.out.println("1. Registrarse");
             System.out.println("2. Iniciar Sesion");
+            System.out.print("Opcion: ");
             String opcion = scanner.nextLine();
             if(opcion.equals("1")){
                 System.out.print("Ingrese su nombre: ");
                 usuario = scanner.nextLine();
                 System.out.print("Ingrese contraseña: ");
                 contraseña = scanner.nextLine();
+                contraseña = controladorR.hash(contraseña);
                 user = new Usuario(usuario,contraseña);
                 controladorR.registrarUsario(user);
                 iniciarSistema();
@@ -38,6 +40,7 @@ public class Cliente
                 usuario = scanner.nextLine();
                 System.out.print("Ingrese contraseña: ");
                 contraseña = scanner.nextLine();
+                contraseña = controladorR.hash(contraseña);
                 user = new Usuario(usuario,contraseña);
                 if(controladorR.verificarUsuario(user)){
                     System.out.println("Ingreso correcto");
