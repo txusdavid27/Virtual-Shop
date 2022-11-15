@@ -59,7 +59,7 @@ public class Cliente
             Socket client = context.createSocket(SocketType.REQ);
             ZHelper.setId(client); //  Set a printable identity
 
-            client.connect("tcp://localhost:5557");
+            client.connect("tcp://25.6.84.72:5557");
 
             //  Send request, get reply
             int opcion;
@@ -78,9 +78,13 @@ public class Cliente
                 if(opcion!=3){
                     switch (opcion) {
                         case 1:
+                        long inicio =System.currentTimeMillis(); 
                             client.send("consultar");
                             System.out.println("Esperando respuesta ....");
                             reply = client.recvStr();
+                        long fin = System.currentTimeMillis();
+                        long total=inicio-fin;
+                        System.out.println("Tiempo de respuesta: "+total); 
                             System.out.println("Client: " + reply);
                             break;
                         case 2:
