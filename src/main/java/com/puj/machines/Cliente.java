@@ -83,7 +83,7 @@ public class Cliente
                             System.out.println("Esperando respuesta ....");
                             reply = client.recvStr();
                         long fin = System.currentTimeMillis();
-                        long total=inicio-fin;
+                        long total=fin-inicio;
                         System.out.println("Tiempo de respuesta: "+total); 
                             System.out.println("Client: " + reply);
                             break;
